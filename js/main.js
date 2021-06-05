@@ -81,8 +81,8 @@ const createPhotoObject = function (counter) {
 const generatePhotosArray = function () {
   const photosArray = [];
 
-  for (let index = MIN_ID_NUMBER; index <= PHOTO_COUNT; index++) {
-    photosArray.push(createPhotoObject(index));
+  for (let i = MIN_ID_NUMBER; i <= PHOTO_COUNT; i++) {
+    photosArray.push(createPhotoObject(i));
   }
 
   return photosArray;
