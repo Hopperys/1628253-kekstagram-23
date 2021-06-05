@@ -1,4 +1,5 @@
 const MIN_ID_NUMBER = 1;
+const MAX_ID_NUMBER = 150;
 const MIN_LIKE_NUMBER = 15;
 const MAX_LIKE_NUMBER = 200;
 const MIN_AVATAR_NUMBER = 1;
@@ -58,7 +59,7 @@ const getRandomArrayElement = function (elements) {
 const generateRandomComment = function () {
   const commentObject = {};
 
-  commentObject.id = getRandomNumber(1, 150);
+  commentObject.id = getRandomNumber(MIN_ID_NUMBER, MAX_ID_NUMBER);
   commentObject.avatar = `img/avatar-${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.svg`;
   commentObject.message = getRandomArrayElement(MESSAGES);
   commentObject.name = getRandomArrayElement(NAMES);
@@ -78,14 +79,14 @@ const createPhotoObject = function (counter) {
   return  photoObject;
 };
 
-const generatePhotosArray = function () {
+const generatePhotosArray = function (min, counter) {
   const photosArray = [];
 
-  for (let i = MIN_ID_NUMBER; i <= PHOTO_COUNT; i++) {
+  for (let i = min; i <= counter; i++) {
     photosArray.push(createPhotoObject(i));
   }
 
   return photosArray;
 };
 
-generatePhotosArray();
+generatePhotosArray(MIN_ID_NUMBER, PHOTO_COUNT);
