@@ -88,4 +88,4 @@ const generatePhotosArray = function () {
   return photosArray;
 };
 
-generatePhotosArray(generatePhotosArray);
+generatePhotosArray();
