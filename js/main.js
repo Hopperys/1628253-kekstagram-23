@@ -4,6 +4,8 @@ const MIN_LIKE_NUMBER = 15;
 const MAX_LIKE_NUMBER = 200;
 const MIN_AVATAR_NUMBER = 1;
 const MAX_AVATAR_NUMBER = 6;
+const MIN_COMMENT_COUNT = 1;
+const MAX_COMMENT_COUNT = 5;
 
 const PHOTO_COUNT = 25;
 
@@ -57,26 +59,22 @@ const getRandomArrayElement = function (elements) {
 };
 
 const generateRandomComment = function () {
-  const commentObject = {};
-
-  commentObject.id = getRandomNumber(MIN_ID_NUMBER, MAX_ID_NUMBER);
-  commentObject.avatar = `img/avatar-${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.svg`;
-  commentObject.message = getRandomArrayElement(MESSAGES);
-  commentObject.name = getRandomArrayElement(NAMES);
-
-  return commentObject;
+  return {
+    id: getRandomNumber(MIN_ID_NUMBER, MAX_ID_NUMBER),
+    avatar: `img/avatar-${getRandomNumber(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)}.svg`,
+    message: getRandomArrayElement(MESSAGES),
+    name: getRandomArrayElement(NAMES),
+  };
 };
 
 const createPhotoObject = function (counter) {
-  const photoObject = {};
-
-  photoObject.id = counter;
-  photoObject.url = `photos/${counter}.jpg`;
-  photoObject.description = getRandomArrayElement(DESCRIPTIONS);
-  photoObject.likes = getRandomNumber(MIN_LIKE_NUMBER, MAX_LIKE_NUMBER);
-  photoObject.comments = generateRandomComment();
-
-  return  photoObject;
+  return  {
+    id: counter,
+    url: `photos/${counter}.jpg`,
+    description: getRandomArrayElement(DESCRIPTIONS),
+    likes: getRandomNumber(MIN_LIKE_NUMBER, MAX_LIKE_NUMBER),
+    comments: new Array(getRandomNumber(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT)).fill(null).map(() => generateRandomComment()),
+  };
 };
 
 const generatePhotosArray = function (min, counter) {
