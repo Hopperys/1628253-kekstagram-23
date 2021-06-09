@@ -14,10 +14,8 @@ const stringLengthCheck = function (string, maxLength) {
   return (string.length <= maxLength);
 };
 
-stringLengthCheck('Hello world', 20);
-
 const getRandomArrayElement = function (elements) {
   return elements[getRandomNumber(0, elements.length -1)];
 };
 
-export {getRandomNumber, getRandomArrayElement};
+export {getRandomNumber, getRandomArrayElement, stringLengthCheck};
