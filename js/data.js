@@ -67,6 +67,6 @@ const generatePhotosArray = function (min, counter) {
   return photosArray;
 };
 
-const randomPhotosArray = generatePhotosArray(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER)
+const randomPhotosArray = generatePhotosArray(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER);
 
 export {randomPhotosArray};
