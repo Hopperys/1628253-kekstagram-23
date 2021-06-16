@@ -8,6 +8,8 @@ const MIN_AVATAR_NUMBER = 1;
 const MAX_AVATAR_NUMBER = 6;
 const MIN_COMMENT_COUNT = 1;
 const MAX_COMMENT_COUNT = 5;
+const MIN_PHOTO_NUMBER = 1;
+const MAX_PHOTO_NUMBER = 25;
 
 const DESCRIPTIONS = [
   'Фото моего завтрака',
@@ -65,4 +67,6 @@ const generatePhotosArray = function (min, counter) {
   return photosArray;
 };
 
-export {generatePhotosArray};
+const randomPhotosArray = generatePhotosArray(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER)
+
+export {randomPhotosArray};
