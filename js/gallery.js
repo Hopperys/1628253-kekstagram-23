@@ -3,20 +3,22 @@ import {randomPhotosArray} from './data.js';
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
 
-const photosListFragment = document.createDocumentFragment();
+const generatePhotosList = function (array, template) {
+  const photoFragment = document.createDocumentFragment();
 
-const generatePhotosList = function (array, element) {
   array.forEach(({url, likes, comments}) => {
-    const photoElement = pictureTemplate.cloneNode(true);
+    const photoElement = template.cloneNode(true);
 
     photoElement.querySelector('.picture__img').src = url;
     photoElement.querySelector('.picture__likes').textContent = likes;
     photoElement.querySelector('.picture__comments').textContent = comments.length;
 
-    photosListFragment.appendChild(photoElement);
+    photoFragment.appendChild(photoElement);
   });
 
-  return element.appendChild(photosListFragment);
+  return photoFragment;
 };
 
-generatePhotosList (randomPhotosArray, pictureList);
+const photosListFragment = generatePhotosList(randomPhotosArray, pictureTemplate);
+
+pictureList.appendChild(photosListFragment);
