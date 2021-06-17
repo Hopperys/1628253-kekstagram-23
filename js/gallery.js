@@ -4,19 +4,19 @@ import { generateBigPicture } from './big-picture.js';
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
 
-const generatePhotosList = function (array, template) {
+const generatePhotosList = (array, template) => {
   const photoFragment = document.createDocumentFragment();
 
-  array.forEach((object) => {
+  array.forEach((dataObject) => {
     const photoElement = template.cloneNode(true);
 
-    photoElement.querySelector('.picture__img').src = object.url;
-    photoElement.querySelector('.picture__likes').textContent = object.likes;
-    photoElement.querySelector('.picture__comments').textContent = object.comments.length;
+    photoElement.querySelector('.picture__img').src = dataObject.url;
+    photoElement.querySelector('.picture__likes').textContent = dataObject.likes;
+    photoElement.querySelector('.picture__comments').textContent = dataObject.comments.length;
 
     photoElement.addEventListener('click', (evt) => {
       evt.preventDefault();
-      generateBigPicture(object);
+      generateBigPicture(dataObject);
     });
 
     photoFragment.appendChild(photoElement);
