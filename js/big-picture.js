@@ -3,7 +3,7 @@ const commentsList = document.querySelector('.social__comments');
 const commentTemplate = document.querySelector('.social__comment');
 const closeButton = document.querySelector('#picture-cancel');
 
-const createCommentsList = function (array, template) {
+const generateCommentsList = function (array, template) {
   const commentFragment = document.createDocumentFragment();
 
   array.comments.forEach ((object) => {
@@ -33,7 +33,7 @@ const generateBigPicture = function (array) {
   bigPicture.querySelector('.comments-count').textContent = array.comments.length;
   bigPicture.querySelector('.social__caption').textContent = array.description;
 
-  commentsList.appendChild(createCommentsList(array, commentTemplate));
+  commentsList.appendChild(generateCommentsList(array, commentTemplate));
 
   document.querySelector('.social__comment-count').classList.add('hidden');
   document.querySelector('.comments-loader').classList.add('hidden');
