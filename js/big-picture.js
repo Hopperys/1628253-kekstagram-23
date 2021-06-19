@@ -1,3 +1,5 @@
+import {isEscEvent} from './util.js';
+
 const bigPicture = document.querySelector('.big-picture');
 const commentsList = document.querySelector('.social__comments');
 const commentTemplate = document.querySelector('.social__comment');
@@ -32,31 +34,42 @@ const removeComments = () => {
 };
 
 const generateBigPicture = (dataObject) => {
-  removeComments();
-  bigPicture.classList.remove('hidden');
   bigPictureImage.src = dataObject.url;
   bigPictureLikes.textContent = dataObject.likes;
   bigPictureCommentsCounter.textContent = dataObject.comments.length;
   bigPictureDescription.textContent = dataObject.description;
 
   commentsList.appendChild(generateCommentsList(dataObject, commentTemplate));
+};
+
+const pictureOpenHandler = (dataObject, escEvent) => {
+  removeComments();
+  generateBigPicture(dataObject);
+  bigPicture.classList.remove('hidden');
 
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
   document.body.classList.add('modal-open');
+
+  document.addEventListener('keydown', escEvent);
 };
 
-const pictureCloseHandler = () => {
+const pictureCloseHandler = (escEvent) => {
   document.body.classList.remove('modal-open');
   bigPicture.classList.add('hidden');
+
+  document.removeEventListener('keydown', escEvent);
 };
 
-closeButton.addEventListener('click', pictureCloseHandler);
-
-window.addEventListener('keydown', (evt) => {
-  if (evt.keyCode === 27) {
-    pictureCloseHandler();
+const onPictureEscKeywodn = (evt) => {
+  if (isEscEvent(evt)) {
+    evt.preventDefault();
+    pictureCloseHandler(onPictureEscKeywodn);
   }
+};
+
+closeButton.addEventListener('click', () => {
+  pictureCloseHandler(onPictureEscKeywodn);
 });
 
-export {generateBigPicture};
+export {pictureOpenHandler, onPictureEscKeywodn};

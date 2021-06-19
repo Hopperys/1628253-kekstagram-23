@@ -18,4 +18,6 @@ const getRandomArrayElement = function (elements) {
   return elements[getRandomNumber(0, elements.length -1)];
 };
 
-export {getRandomNumber, getRandomArrayElement, stringLengthCheck};
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+export {getRandomNumber, getRandomArrayElement, stringLengthCheck, isEscEvent};
