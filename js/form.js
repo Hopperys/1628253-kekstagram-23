@@ -1,4 +1,4 @@
-import { isEscEvent } from './util.js';
+import { isEscEvent} from './util.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -6,6 +6,10 @@ const uploadCancelButton = uploadOverlay.querySelector('#upload-cancel');
 const effectValue = uploadOverlay.querySelector('.effect-level__value');
 const hashTagsInput = uploadOverlay.querySelector('.text__hashtags');
 const pictureDescription = uploadOverlay.querySelector('.text__description');
+
+const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
+
+const MAX_TAGS_COUNT = 5;
 
 const modalOpenHandler = (escEvent) => {
   uploadOverlay.classList.remove('hidden');
@@ -40,3 +44,44 @@ uploadCancelButton.addEventListener('click', () => {
   modalCloseHandler(onModalEscKeydown);
 });
 
+hashTagsInput.addEventListener('input', () => {
+  const hashTagsArray = hashTagsInput.value.trim().split(' ');
+  const lowerTagsArray = hashTagsInput.value.trim().toLowerCase().split(' ').sort();
+
+  hashTagsArray.forEach((element) => {
+    if (hashTagsArray.length > MAX_TAGS_COUNT) {
+      return hashTagsInput.setCustomValidity('Максимальное количество тегов - 5.');
+    }
+    if (!validity.test(element)) {
+      return hashTagsInput.setCustomValidity('Тег должен начинатся с # и состоять максимум из 20 букв и цифр.');
+    }
+    if (element.length > 20) {
+      return hashTagsInput.setCustomValidity('Макс.длина 20');
+    }
+    return hashTagsInput.setCustomValidity('');
+  });
+
+  lowerTagsArray.forEach((element, index) => {
+    if (lowerTagsArray[index] === lowerTagsArray[index + 1]) {
+      return hashTagsInput.setCustomValidity('Теги не должны повторяться');
+    }
+  });
+
+  hashTagsInput.reportValidity();
+});
+
+hashTagsInput.addEventListener('focus', () => {
+  document.removeEventListener('keydown', onModalEscKeydown);
+});
+
+hashTagsInput.addEventListener('blur', () => {
+  document.addEventListener('keydown', onModalEscKeydown);
+});
+
+pictureDescription.addEventListener('focus', () => {
+  document.removeEventListener('keydown', onModalEscKeydown);
+});
+
+pictureDescription.addEventListener('blur', () => {
+  document.addEventListener('keydown', onModalEscKeydown);
+});
