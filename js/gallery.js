@@ -1,17 +1,23 @@
 import {randomPhotosArray} from './data.js';
+import { generateBigPicture } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
 
-const generatePhotosList = function (array, template) {
+const generatePhotosList = (array, template) => {
   const photoFragment = document.createDocumentFragment();
 
-  array.forEach(({url, likes, comments}) => {
+  array.forEach((dataObject) => {
     const photoElement = template.cloneNode(true);
 
-    photoElement.querySelector('.picture__img').src = url;
-    photoElement.querySelector('.picture__likes').textContent = likes;
-    photoElement.querySelector('.picture__comments').textContent = comments.length;
+    photoElement.querySelector('.picture__img').src = dataObject.url;
+    photoElement.querySelector('.picture__likes').textContent = dataObject.likes;
+    photoElement.querySelector('.picture__comments').textContent = dataObject.comments.length;
+
+    photoElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      generateBigPicture(dataObject);
+    });
 
     photoFragment.appendChild(photoElement);
   });
