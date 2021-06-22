@@ -11,37 +11,44 @@ const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const MAX_TAGS_COUNT = 5;
 
-const modalOpenHandler = (escEvent) => {
-  uploadOverlay.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
-  document.addEventListener('keydown', escEvent);
-};
-
-const modalCloseHandler = (escEvent) => {
+const closeModal = () => {
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFile.value = '';
   effectValue.value = '';
   hashTagsInput.value = '';
   pictureDescription.value = '';
-
-  document.removeEventListener('keydown', escEvent);
 };
 
-const onModalEscKeydown = (evt) => {
+const openModal = () => {
+  uploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+};
+
+const modalKeydownHandler = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    modalCloseHandler(onModalEscKeydown);
+    closeModal();
+    document.removeEventListener('keydown', modalKeydownHandler);
   }
 };
 
+const uploadFileChangeHandler = () => {
+  openModal();
+  document.addEventListener('keydown', modalKeydownHandler);
+};
+
+const uploadCancelButtonClickHandler = () => {
+  closeModal();
+  document.removeEventListener('keydown', modalKeydownHandler);
+};
+
 uploadFile.addEventListener('change', () => {
-  modalOpenHandler(onModalEscKeydown);
+  uploadFileChangeHandler();
 });
 
 uploadCancelButton.addEventListener('click', () => {
-  modalCloseHandler(onModalEscKeydown);
+  uploadCancelButtonClickHandler();
 });
 
 hashTagsInput.addEventListener('input', () => {
@@ -51,6 +58,9 @@ hashTagsInput.addEventListener('input', () => {
   hashTagsArray.forEach((element) => {
     if (hashTagsArray.length > MAX_TAGS_COUNT) {
       return hashTagsInput.setCustomValidity('Максимальное количество тегов - 5.');
+    }
+    if (element.length === 1) {
+      return hashTagsInput.setCustomValidity('Тег должен состоять минимум из двух символов');
     }
     if (!validity.test(element)) {
       return hashTagsInput.setCustomValidity('Тег должен начинатся с # и состоять максимум из 20 букв и цифр.');
@@ -70,18 +80,14 @@ hashTagsInput.addEventListener('input', () => {
   hashTagsInput.reportValidity();
 });
 
-hashTagsInput.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onModalEscKeydown);
+hashTagsInput.addEventListener('keydown', (evt) => {
+  if (isEscEvent(evt)) {
+    evt.stopPropagation();
+  }
 });
 
-hashTagsInput.addEventListener('blur', () => {
-  document.addEventListener('keydown', onModalEscKeydown);
-});
-
-pictureDescription.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onModalEscKeydown);
-});
-
-pictureDescription.addEventListener('blur', () => {
-  document.addEventListener('keydown', onModalEscKeydown);
+hashTagsInput.addEventListener('keydown', (evt) => {
+  if (isEscEvent(evt)) {
+    evt.stopPropagation();
+  }
 });
