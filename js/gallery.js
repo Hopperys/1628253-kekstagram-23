@@ -1,5 +1,5 @@
 import {randomPhotosArray} from './data.js';
-import { generateBigPicture } from './big-picture.js';
+import { pictureOpenHandler, onPictureEscKeywodn } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
@@ -16,7 +16,7 @@ const generatePhotosList = (array, template) => {
 
     photoElement.addEventListener('click', (evt) => {
       evt.preventDefault();
-      generateBigPicture(dataObject);
+      pictureOpenHandler(dataObject, onPictureEscKeywodn);
     });
 
     photoFragment.appendChild(photoElement);
