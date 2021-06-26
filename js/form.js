@@ -43,13 +43,9 @@ const uploadCancelButtonClickHandler = () => {
   document.removeEventListener('keydown', modalKeydownHandler);
 };
 
-uploadFile.addEventListener('change', () => {
-  uploadFileChangeHandler();
-});
+uploadFile.addEventListener('change', uploadFileChangeHandler);
 
-uploadCancelButton.addEventListener('click', () => {
-  uploadCancelButtonClickHandler();
-});
+uploadCancelButton.addEventListener('click', uploadCancelButtonClickHandler);
 
 hashTagsInput.addEventListener('input', () => {
   const hashTagsArray = hashTagsInput.value.trim().split(' ');
@@ -86,7 +82,7 @@ hashTagsInput.addEventListener('keydown', (evt) => {
   }
 });
 
-hashTagsInput.addEventListener('keydown', (evt) => {
+pictureDescription.addEventListener('keydown', (evt) => {
   if (isEscEvent(evt)) {
     evt.stopPropagation();
   }
