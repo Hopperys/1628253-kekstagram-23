@@ -1,4 +1,5 @@
-import { isEscEvent} from './util.js';
+import {setImageScale} from './picture-scale.js';
+import {isEscEvent} from './util.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -6,10 +7,13 @@ const uploadCancelButton = uploadOverlay.querySelector('#upload-cancel');
 const effectValue = uploadOverlay.querySelector('.effect-level__value');
 const hashTagsInput = uploadOverlay.querySelector('.text__hashtags');
 const pictureDescription = uploadOverlay.querySelector('.text__description');
+const imagePreview = document.querySelector('.img-upload__preview');
+const sliderWrapper = document.querySelector('.img-upload__effect-level');
 
 const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const MAX_TAGS_COUNT = 5;
+const DEFAULT_SCALE_VALUE = 100;
 
 const closeModal = () => {
   uploadOverlay.classList.add('hidden');
@@ -18,11 +22,14 @@ const closeModal = () => {
   effectValue.value = '';
   hashTagsInput.value = '';
   pictureDescription.value = '';
+  setImageScale(DEFAULT_SCALE_VALUE);
+  imagePreview.style.filter = 'none';
 };
 
 const openModal = () => {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
+  sliderWrapper.classList.add('visually-hidden');
 };
 
 const modalKeydownHandler = (evt) => {
