@@ -1,5 +1,7 @@
 import {isEscEvent} from './util.js';
 
+const COMMENTS_LOAD_STEP = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const commentsList = document.querySelector('.social__comments');
 const commentTemplate = document.querySelector('.social__comment');
@@ -11,12 +13,10 @@ const bigPictureLikes = bigPicture.querySelector('.likes-count');
 const bigPictureCommentsCounter = bigPicture.querySelector('.comments-count');
 const bigPictureDescription = bigPicture.querySelector('.social__caption');
 
-const COMMENTS_LOAD_STEP = 5;
-
-const generateCommentsList = (array, template) => {
+const generateCommentsList = (comments, template) => {
   const commentFragment = document.createDocumentFragment();
 
-  array.forEach ((comment) => {
+  comments.forEach ((comment) => {
     const randomComment = template.cloneNode(true);
 
     randomComment.querySelector('.social__picture').src = comment.avatar;
@@ -56,7 +56,7 @@ const generateBigPicture = (dataObject) => {
 
   showInitialCommentsArray(dataObject.comments);
 
-  let currentCommentsNumber = 5;
+  let currentCommentsNumber = COMMENTS_LOAD_STEP;
 
   // Отрисовываем дополнительные комментарии по клику на кнопку
 
