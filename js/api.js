@@ -1,4 +1,4 @@
-const createFetch = (onSuccess, onError) => () => fetch('https://23.javascript.pages.academy/kekstagram/data',
+const getData = (onSuccess, onError) => () => fetch('https://23.javascript.pages.academy/kekstagram/data',
   {
     method: 'GET',
     credentials: 'same-origin',
@@ -38,4 +38,4 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-export {createFetch, sendData};
+export {getData, sendData};
