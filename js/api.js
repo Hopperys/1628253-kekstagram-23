@@ -18,4 +18,24 @@ const createFetch = (onSuccess, onError) => () => fetch('https://23.javascript.p
     onError(err);
   });
 
-export {createFetch};
+const sendData = (onSuccess, onFail, body) => {
+  fetch(
+    'https://23.javascript.pages.academy/kekstagram',
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      }
+    })
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+    });
+};
+
+export {createFetch, sendData};
