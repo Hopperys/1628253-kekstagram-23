@@ -18,8 +18,8 @@ const imagePreview = document.querySelector('.img-upload__preview');
 const sliderWrapper = document.querySelector('.img-upload__effect-level');
 const successPopup = document.querySelector('#success').content.querySelector('.success');
 const successButton = document.querySelector('#success').content.querySelector('.success__button');
-const errorPopup = document.querySelector('#error');
-const errorButton = document.querySelector('.error__button');
+const errorPopup = document.querySelector('#error').content.querySelector('.error');
+const errorButton = document.querySelector('#error').content.querySelector('.error__button');
 
 const closeModal = () => {
   uploadOverlay.classList.add('hidden');
