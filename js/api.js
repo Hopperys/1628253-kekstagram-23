@@ -1,9 +1,9 @@
-const getData = (onSuccess, onError) => () => fetch('https://23.javascript.pages.academy/kekstagram/data',
-  {
-    method: 'GET',
-    credentials: 'same-origin',
-  },
-)
+const request = (url, options) => fetch(url, {
+  credentials: 'same-origin',
+  ...options,
+});
+
+const getData = (onSuccess, onError) => request('https://23.javascript.pages.academy/kekstagram/data', { method: 'GET' })
   .then((response) => {
     if (response.ok) {
       return response.json();
@@ -18,24 +18,16 @@ const getData = (onSuccess, onError) => () => fetch('https://23.javascript.pages
     onError(err);
   });
 
-const sendData = (onSuccess, onFail, body) => {
-  fetch(
-    'https://23.javascript.pages.academy/kekstagram',
-    {
-      method: 'POST',
-      body,
-    },
-  )
-    .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        onFail();
-      }
-    })
-    .catch(() => {
+const sendData = (onSuccess, onFail, body) => request('https://23.javascript.pages.academy/kekstagram', { method: 'POST', body })
+  .then((response) => {
+    if (response.ok) {
+      onSuccess();
+    } else {
       onFail();
-    });
-};
+    }
+  })
+  .catch(() => {
+    onFail();
+  });
 
 export {getData, sendData};

@@ -25,7 +25,7 @@ const generatePhotosList = (array, template) => {
   return photoFragment;
 };
 
-const fetchPhotos = getData(
+getData(
   (photos) => {
     const photosListFragment = generatePhotosList(photos, pictureTemplate);
 
@@ -44,5 +44,3 @@ const fetchPhotos = getData(
     });
     return errorDiv;
   });
-
-fetchPhotos();
