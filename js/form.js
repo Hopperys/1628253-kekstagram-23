@@ -1,11 +1,13 @@
 import {setImageScale} from './picture-scale.js';
 import {isEscEvent} from './util.js';
+import { sendData } from './api.js';
 
 const MAX_TAGS_COUNT = 5;
 const DEFAULT_SCALE_VALUE = 100;
 
 const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
+const uploadForm = document.querySelector('.img-upload__form');
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancelButton = uploadOverlay.querySelector('#upload-cancel');
@@ -14,6 +16,10 @@ const hashTagsInput = uploadOverlay.querySelector('.text__hashtags');
 const pictureDescription = uploadOverlay.querySelector('.text__description');
 const imagePreview = document.querySelector('.img-upload__preview');
 const sliderWrapper = document.querySelector('.img-upload__effect-level');
+const successPopup = document.querySelector('#success').content.querySelector('.success');
+const successButton = successPopup.querySelector('.success__button');
+const errorPopup = document.querySelector('#error').content.querySelector('.error');
+const errorButton = errorPopup.querySelector('.error__button');
 
 const closeModal = () => {
   uploadOverlay.classList.add('hidden');
@@ -62,6 +68,9 @@ hashTagsInput.addEventListener('input', () => {
     if (hashTagsArray.length > MAX_TAGS_COUNT) {
       return hashTagsInput.setCustomValidity('Максимальное количество тегов - 5.');
     }
+    if (element === '') {
+      return hashTagsInput.setCustomValidity('');
+    }
     if (element.length === 1) {
       return hashTagsInput.setCustomValidity('Тег должен состоять минимум из двух символов');
     }
@@ -80,6 +89,14 @@ hashTagsInput.addEventListener('input', () => {
     }
   });
 
+  const inputValidityCheck = hashTagsInput.checkValidity();
+
+  if (!inputValidityCheck) {
+    hashTagsInput.style.borderColor = 'red';
+  } else if (inputValidityCheck) {
+    hashTagsInput.style.borderColor = '';
+  }
+
   hashTagsInput.reportValidity();
 });
 
@@ -94,3 +111,43 @@ pictureDescription.addEventListener('keydown', (evt) => {
     evt.stopPropagation();
   }
 });
+
+const popupEventsHandler = (evt) => {
+  if (isEscEvent(evt)) {
+    document.body.lastChild.remove();
+  } else if (evt.target === document.body.lastChild) {
+    document.body.lastChild.remove();
+  }
+  document.removeEventListener('click', popupEventsHandler);
+  document.removeEventListener('keydown', popupEventsHandler);
+};
+
+const popupClickHandler = () => {
+  document.body.lastChild.remove();
+  document.removeEventListener('keydown', popupEventsHandler);
+};
+
+const popupOpenHandler = (template, button) => {
+  closeModal();
+  document.body.append(template);
+
+  document.removeEventListener('keydown', modalKeydownHandler);
+
+  button.addEventListener('click', popupClickHandler);
+  document.addEventListener('keydown', popupEventsHandler);
+  document.addEventListener('click', popupEventsHandler);
+};
+
+const setUserFormSubmit = () => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => popupOpenHandler(successPopup, successButton),
+      () => popupOpenHandler(errorPopup, errorButton),
+      new FormData(evt.target),
+    );
+  });
+};
+
+setUserFormSubmit();
