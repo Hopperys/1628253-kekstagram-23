@@ -92,21 +92,19 @@ getData(
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 
     filtersForm.addEventListener('click', (evt) => {
-      if (evt.target === defaultPhotosButton) {
-        filterButtonsClickHandler(randomPhotosButton, discussedPhotosButton, defaultPhotosButton);
-        renderPictures(photos);
-      }
-      if (evt.target === randomPhotosButton) {
-        filterButtonsClickHandler(defaultPhotosButton, discussedPhotosButton, randomPhotosButton);
-
-        const randomPhotosArray = generateRandomPhotosArray(photos);
-        renderPictures(randomPhotosArray);
-      }
-      if (evt.target === discussedPhotosButton) {
-        filterButtonsClickHandler(randomPhotosButton, defaultPhotosButton, discussedPhotosButton);
-
-        const discussedPhotosArray= sortPhotosArray(photos);
-        renderPictures(discussedPhotosArray);
+      switch (evt.target.id) {
+        case ('filter-default'):
+          filterButtonsClickHandler(randomPhotosButton, discussedPhotosButton, defaultPhotosButton);
+          renderPictures(photos);
+          break;
+        case ('filter-random'):
+          filterButtonsClickHandler(defaultPhotosButton, discussedPhotosButton, randomPhotosButton);
+          renderPictures(generateRandomPhotosArray(photos));
+          break;
+        case ('filter-discussed'):
+          filterButtonsClickHandler(randomPhotosButton, defaultPhotosButton, discussedPhotosButton);
+          renderPictures(sortPhotosArray(photos));
+          break;
       }
     });
   },
