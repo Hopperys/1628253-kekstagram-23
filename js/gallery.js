@@ -3,12 +3,15 @@ import { getData } from './api.js';
 import { debounce } from './utils/debounce.js';
 
 const RERENDER_DELAY = 500;
+const NUMBERS_ARRAY_LENGTH = 25;
+const SLICED_NUMBERS_ARRAY_LENGTH = 10;
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
-const defaultPhotosButton = document.querySelector('#filter-default');
-const randomPhotosButton = document.querySelector('#filter-random');
-const discussedPhotosButton = document.querySelector('#filter-discussed');
+const filtersForm = document.querySelector('.img-filters__form');
+const defaultPhotosButton = filtersForm.querySelector('#filter-default');
+const randomPhotosButton = filtersForm.querySelector('#filter-random');
+const discussedPhotosButton = filtersForm.querySelector('#filter-discussed');
 
 const generatePhotosList = (array, template) => {
   const photoFragment = document.createDocumentFragment();
@@ -31,14 +34,22 @@ const generatePhotosList = (array, template) => {
   return photoFragment;
 };
 
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 const generateRandomPhotosArray = (defaultArray) => {
   const initialNumbersArray = [];
 
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < NUMBERS_ARRAY_LENGTH; i++) {
     initialNumbersArray.push(i);
   }
 
-  const slicedNumbersArray = initialNumbersArray.sort(() => Math.random() - 0.5).slice(0, 10);
+  const slicedNumbersArray = shuffle(initialNumbersArray).slice(0, SLICED_NUMBERS_ARRAY_LENGTH);
 
   const randomPhotosArray = [];
 
@@ -52,15 +63,7 @@ const generateRandomPhotosArray = (defaultArray) => {
 const sortPhotosArray = (defaultArray) => {
   const discussedPhotosArray = defaultArray.slice(0);
 
-  for (let i = 0; i < discussedPhotosArray.length; i++) {
-    for (let j = 0; j < discussedPhotosArray.length - 1; j++) {
-      if (discussedPhotosArray[i].comments.length > discussedPhotosArray[j].comments.length) {
-        const temp = discussedPhotosArray[i];
-        discussedPhotosArray[i] = discussedPhotosArray[j];
-        discussedPhotosArray[j] = temp;
-      }
-    }
-  }
+  discussedPhotosArray.sort((a, b) => b.comments.length - a.comments.length);
 
   return discussedPhotosArray;
 };
@@ -88,23 +91,23 @@ getData(
     renderPictures(photos);
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 
-    defaultPhotosButton.addEventListener('click', () => {
-      filterButtonsClickHandler(randomPhotosButton, discussedPhotosButton, defaultPhotosButton);
-      renderPictures(photos);
-    });
+    filtersForm.addEventListener('click', (evt) => {
+      if (evt.target === defaultPhotosButton) {
+        filterButtonsClickHandler(randomPhotosButton, discussedPhotosButton, defaultPhotosButton);
+        renderPictures(photos);
+      }
+      if (evt.target === randomPhotosButton) {
+        filterButtonsClickHandler(defaultPhotosButton, discussedPhotosButton, randomPhotosButton);
 
-    randomPhotosButton.addEventListener('click', () => {
-      filterButtonsClickHandler(defaultPhotosButton, discussedPhotosButton, randomPhotosButton);
+        const randomPhotosArray = generateRandomPhotosArray(photos);
+        renderPictures(randomPhotosArray);
+      }
+      if (evt.target === discussedPhotosButton) {
+        filterButtonsClickHandler(randomPhotosButton, defaultPhotosButton, discussedPhotosButton);
 
-      const randomPhotosArray = generateRandomPhotosArray(photos);
-      renderPictures(randomPhotosArray);
-    });
-
-    discussedPhotosButton.addEventListener('click', () => {
-      filterButtonsClickHandler(randomPhotosButton, defaultPhotosButton, discussedPhotosButton);
-
-      const discussedPhotosArray= sortPhotosArray(photos);
-      renderPictures(discussedPhotosArray);
+        const discussedPhotosArray= sortPhotosArray(photos);
+        renderPictures(discussedPhotosArray);
+      }
     });
   },
   (err) => {
