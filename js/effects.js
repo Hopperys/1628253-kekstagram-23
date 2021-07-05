@@ -1,8 +1,12 @@
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const imagePreview = document.querySelector('.img-upload__preview');
+const uploadImagePreview = imagePreview.querySelector('img');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
 const sliderWrapper = document.querySelector('.img-upload__effect-level');
 const effectsForm = document.querySelector('.img-upload__effects');
+const fileChooser = document.querySelector('#upload-file');
 
 const effects = {
   chrome: {
@@ -122,5 +126,22 @@ effectsForm.addEventListener('click', (evt) => {
       showEffect(effects.heat.htmlClass, effects.heat.name, effects.heat.unit);
       sliderOptionsHandler(effects.heat.min, effects.heat.max, effects.heat.start, effects.heat.step);
       break;
+  }
+});
+
+fileChooser.addEventListener('change', () => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      uploadImagePreview.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
   }
 });
