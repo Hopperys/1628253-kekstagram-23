@@ -88,7 +88,8 @@ const renderPictures = (debounce(
 
 getData(
   (photos) => {
-    renderPictures(photos);
+    const photosListFragment = generatePhotosList(photos, pictureTemplate);
+    pictureList.appendChild(photosListFragment);
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 
     filtersForm.addEventListener('click', (evt) => {

@@ -29,7 +29,8 @@ const closeModal = () => {
   hashTagsInput.value = '';
   pictureDescription.value = '';
   setImageScale(DEFAULT_SCALE_VALUE);
-  imagePreview.style.filter = 'none';
+  imagePreview.querySelector('img').style.filter = 'none';
+  imagePreview.querySelector('img').classList = '';
 };
 
 const openModal = () => {
@@ -112,19 +113,24 @@ pictureDescription.addEventListener('keydown', (evt) => {
   }
 });
 
+const removeEventListeners = (event) => {
+  document.removeEventListener('click', event);
+  document.removeEventListener('keydown', event);
+};
+
 const popupEventsHandler = (evt) => {
   if (isEscEvent(evt)) {
     document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
   }
-  document.removeEventListener('click', popupEventsHandler);
-  document.removeEventListener('keydown', popupEventsHandler);
 };
 
 const popupClickHandler = () => {
   document.body.lastChild.remove();
-  document.removeEventListener('keydown', popupEventsHandler);
+  removeEventListeners(popupEventsHandler);
 };
 
 const popupOpenHandler = (template, button) => {

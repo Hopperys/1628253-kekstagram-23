@@ -1,6 +1,7 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const imagePreview = document.querySelector('.img-upload__preview');
+const picturePreview = imagePreview.querySelector('img');
 const uploadImagePreview = imagePreview.querySelector('img');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
@@ -80,11 +81,12 @@ noUiSlider.create(sliderElement, {
 const showEffect = (effectClass, effectStyle, effectUnit) => {
   sliderWrapper.classList.remove('visually-hidden');
   imagePreview.classList = 'img-upload__preview';
-  imagePreview.classList.add(`${effectClass}`);
+  picturePreview.classList = '';
+  picturePreview.classList.add(`${effectClass}`);
 
   sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
     effectValue.value = unencoded[handle];
-    imagePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
+    picturePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
   });
 };
 
@@ -102,9 +104,9 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
 effectsForm.addEventListener('click', (evt) => {
   switch (evt.target.id) {
     case ('effect-none'):
-      imagePreview.classList = 'img-upload__preview';
+      picturePreview.classList = '';
       sliderWrapper.classList.add('visually-hidden');
-      imagePreview.style.filter = 'none';
+      picturePreview.style.filter = 'none';
       break;
     case ('effect-chrome'):
       showEffect(effects.chrome.htmlClass, effects.chrome.name, effects.chrome.unit);

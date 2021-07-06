@@ -58,9 +58,7 @@ const generateBigPicture = (dataObject) => {
 
   let currentCommentsNumber = COMMENTS_LOAD_STEP;
 
-  // Отрисовываем дополнительные комментарии по клику на кнопку
-
-  commentsLoader.addEventListener('click', () => {
+  const commentsLoaderClickHandler = () => {
     const newCommentsNumber = currentCommentsNumber + COMMENTS_LOAD_STEP;
     const additionalCommentsArray = dataObject.comments.slice(currentCommentsNumber, newCommentsNumber);
     currentCommentsNumber = newCommentsNumber;
@@ -71,9 +69,16 @@ const generateBigPicture = (dataObject) => {
 
     if (dataObject.comments.length === renderedCommentsArrayLength) {
       commentsLoader.classList.add('hidden');
+      commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
     }
     socialCommentCount.firstChild.textContent = `${renderedCommentsArrayLength  } из  `;
-  });
+  };
+
+  commentsLoader.addEventListener('click', commentsLoaderClickHandler);
+
+  if (document.querySelectorAll('.social__comment').length < COMMENTS_LOAD_STEP) {
+    commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
+  }
 };
 
 const closeBigPicture = () => {
@@ -106,4 +111,4 @@ const pictureCloseHandler = () => {
 
 closeButton.addEventListener('click', pictureCloseHandler);
 
-export {pictureOpenHandler, pictureKeydownHandler};
+export {pictureOpenHandler};

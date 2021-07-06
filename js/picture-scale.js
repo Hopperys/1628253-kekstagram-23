@@ -11,7 +11,7 @@ let currentScale = 100;
 
 const setImageScale = (newScale) => {
   scaleValue.value = `${newScale}%`;
-  imagePreview.style = `transform: scale(${newScale / 100})`;
+  imagePreview.querySelector('img').style = `transform: scale(${newScale / 100})`;
   currentScale = newScale;
 };
 
