@@ -1,6 +1,7 @@
 import {isEscEvent} from './util.js';
 
 const COMMENTS_LOAD_STEP = 5;
+let currentCommentsArray = [];
 
 const bigPicture = document.querySelector('.big-picture');
 const commentsList = document.querySelector('.social__comments');
@@ -48,43 +49,34 @@ const showInitialCommentsArray = (commentsArray) => {
   }
 };
 
+const renderAdditionalComments = () => {
+  const additionalCommentsArray = currentCommentsArray.slice(commentsList.children.length, commentsList.children.length + COMMENTS_LOAD_STEP);
+
+  commentsList.appendChild(generateCommentsList(additionalCommentsArray, commentTemplate));
+
+  if (currentCommentsArray.length === commentsList.children.length) {
+    commentsLoader.classList.add('hidden');
+  }
+  socialCommentCount.firstChild.textContent = `${commentsList.children.length  } из  `;
+};
+
 const generateBigPicture = (dataObject) => {
   bigPictureImage.src = dataObject.url;
   bigPictureLikes.textContent = dataObject.likes;
   bigPictureCommentsCounter.textContent = dataObject.comments.length;
   bigPictureDescription.textContent = dataObject.description;
 
+  currentCommentsArray = dataObject.comments;
+
+  commentsLoader.addEventListener('click', renderAdditionalComments);
   showInitialCommentsArray(dataObject.comments);
-
-  let currentCommentsNumber = COMMENTS_LOAD_STEP;
-
-  const commentsLoaderClickHandler = () => {
-    const newCommentsNumber = currentCommentsNumber + COMMENTS_LOAD_STEP;
-    const additionalCommentsArray = dataObject.comments.slice(currentCommentsNumber, newCommentsNumber);
-    currentCommentsNumber = newCommentsNumber;
-
-    commentsList.appendChild(generateCommentsList(additionalCommentsArray, commentTemplate));
-
-    const renderedCommentsArrayLength = document.querySelectorAll('.social__comment').length;
-
-    if (dataObject.comments.length === renderedCommentsArrayLength) {
-      commentsLoader.classList.add('hidden');
-      commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
-    }
-    socialCommentCount.firstChild.textContent = `${renderedCommentsArrayLength  } из  `;
-  };
-
-  commentsLoader.addEventListener('click', commentsLoaderClickHandler);
-
-  if (document.querySelectorAll('.social__comment').length < COMMENTS_LOAD_STEP) {
-    commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
-  }
 };
 
 const closeBigPicture = () => {
   document.body.classList.remove('modal-open');
   bigPicture.classList.add('hidden');
   commentsLoader.classList.remove('hidden');
+  commentsLoader.removeEventListener('click', renderAdditionalComments);
 };
 
 const pictureKeydownHandler = (evt) => {
