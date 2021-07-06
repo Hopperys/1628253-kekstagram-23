@@ -76,32 +76,34 @@ const generateBigPicture = (dataObject) => {
   });
 };
 
-const pictureOpenHandler = (dataObject, escEvent) => {
+const closeBigPicture = () => {
+  document.body.classList.remove('modal-open');
+  bigPicture.classList.add('hidden');
+  commentsLoader.classList.remove('hidden');
+};
+
+const pictureKeydownHandler = (evt) => {
+  if (isEscEvent(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+    document.removeEventListener('keydown', pictureKeydownHandler);
+  }
+};
+
+const pictureOpenHandler = (dataObject) => {
   removeComments();
   generateBigPicture(dataObject);
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  document.addEventListener('keydown', escEvent);
+  document.addEventListener('keydown', pictureKeydownHandler);
 };
 
-const pictureCloseHandler = (escEvent) => {
-  document.body.classList.remove('modal-open');
-  bigPicture.classList.add('hidden');
-  commentsLoader.classList.remove('hidden');
-
-  document.removeEventListener('keydown', escEvent);
+const pictureCloseHandler = () => {
+  closeBigPicture();
+  document.removeEventListener('keydown', pictureKeydownHandler);
 };
 
-const onPictureEscKeywodn = (evt) => {
-  if (isEscEvent(evt)) {
-    evt.preventDefault();
-    pictureCloseHandler(onPictureEscKeywodn);
-  }
-};
+closeButton.addEventListener('click', pictureCloseHandler);
 
-closeButton.addEventListener('click', () => {
-  pictureCloseHandler(onPictureEscKeywodn);
-});
-
-export {pictureOpenHandler, onPictureEscKeywodn};
+export {pictureOpenHandler, pictureKeydownHandler};

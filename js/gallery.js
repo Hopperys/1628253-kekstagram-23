@@ -1,4 +1,4 @@
-import { pictureOpenHandler, onPictureEscKeywodn } from './big-picture.js';
+import { pictureOpenHandler } from './big-picture.js';
 import { getData } from './api.js';
 import { debounce } from './utils/debounce.js';
 
@@ -25,7 +25,7 @@ const generatePhotosList = (array, template) => {
 
     photoElement.addEventListener('click', (evt) => {
       evt.preventDefault();
-      pictureOpenHandler(dataObject, onPictureEscKeywodn);
+      pictureOpenHandler(dataObject);
     });
 
     photoFragment.appendChild(photoElement);
