@@ -1,10 +1,9 @@
 import { pictureOpenHandler } from './big-picture.js';
 import { getData } from './api.js';
-import { debounce } from './utils/debounce.js';
+import { debounce } from './util.js';
 
 const RERENDER_DELAY = 500;
-const NUMBERS_ARRAY_LENGTH = 25;
-const SLICED_NUMBERS_ARRAY_LENGTH = 10;
+const RANDOM_PHOTOS_ARRAY_LENGTH = 10;
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictureList = document.querySelector('.pictures');
@@ -43,21 +42,9 @@ const shuffle = (array) => {
 };
 
 const generateRandomPhotosArray = (defaultArray) => {
-  const initialNumbersArray = [];
+  const newArray = defaultArray.slice(0);
 
-  for (let i = 0; i < NUMBERS_ARRAY_LENGTH; i++) {
-    initialNumbersArray.push(i);
-  }
-
-  const slicedNumbersArray = shuffle(initialNumbersArray).slice(0, SLICED_NUMBERS_ARRAY_LENGTH);
-
-  const randomPhotosArray = [];
-
-  slicedNumbersArray.forEach((number) => {
-    randomPhotosArray.push(defaultArray[number]);
-  });
-
-  return randomPhotosArray;
+  return shuffle(newArray).slice(0, RANDOM_PHOTOS_ARRAY_LENGTH);
 };
 
 const sortPhotosArray = (defaultArray) => {

@@ -4,11 +4,11 @@ const COMMENTS_LOAD_STEP = 5;
 let currentCommentsArray = [];
 
 const bigPicture = document.querySelector('.big-picture');
-const commentsList = document.querySelector('.social__comments');
-const commentTemplate = document.querySelector('.social__comment');
-const closeButton = document.querySelector('#picture-cancel');
-const socialCommentCount = document.querySelector('.social__comment-count');
-const commentsLoader = document.querySelector('.comments-loader');
+const commentsList = bigPicture.querySelector('.social__comments');
+const commentTemplate = commentsList.querySelector('.social__comment');
+const closeButton = bigPicture.querySelector('#picture-cancel');
+const socialCommentCount = bigPicture.querySelector('.social__comment-count');
+const commentsLoader = bigPicture.querySelector('.comments-loader');
 const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const bigPictureLikes = bigPicture.querySelector('.likes-count');
 const bigPictureCommentsCounter = bigPicture.querySelector('.comments-count');
