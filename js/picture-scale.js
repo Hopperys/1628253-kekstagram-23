@@ -5,13 +5,14 @@ const SCALE_STEP = 25;
 const minusButton = document.querySelector('.scale__control--smaller');
 const plusButton = document.querySelector('.scale__control--bigger');
 const imagePreview = document.querySelector('.img-upload__preview');
+const uploadImagePreview = imagePreview.querySelector('img');
 const scaleValue = document.querySelector('.scale__control--value');
 
 let currentScale = 100;
 
 const setImageScale = (newScale) => {
   scaleValue.value = `${newScale}%`;
-  imagePreview.style = `transform: scale(${newScale / 100})`;
+  uploadImagePreview.style = `transform: scale(${newScale / 100})`;
   currentScale = newScale;
 };
 

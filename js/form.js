@@ -8,14 +8,15 @@ const DEFAULT_SCALE_VALUE = 100;
 const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const uploadForm = document.querySelector('.img-upload__form');
-const uploadFile = document.querySelector('#upload-file');
-const uploadOverlay = document.querySelector('.img-upload__overlay');
+const uploadFile = uploadForm.querySelector('#upload-file');
+const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadCancelButton = uploadOverlay.querySelector('#upload-cancel');
 const effectValue = uploadOverlay.querySelector('.effect-level__value');
 const hashTagsInput = uploadOverlay.querySelector('.text__hashtags');
 const pictureDescription = uploadOverlay.querySelector('.text__description');
-const imagePreview = document.querySelector('.img-upload__preview');
-const sliderWrapper = document.querySelector('.img-upload__effect-level');
+const imagePreview = uploadOverlay.querySelector('.img-upload__preview');
+const uploadImagePreview = imagePreview.querySelector('img');
+const sliderWrapper = uploadOverlay.querySelector('.img-upload__effect-level');
 const successPopup = document.querySelector('#success').content.querySelector('.success');
 const successButton = successPopup.querySelector('.success__button');
 const errorPopup = document.querySelector('#error').content.querySelector('.error');
@@ -29,7 +30,8 @@ const closeModal = () => {
   hashTagsInput.value = '';
   pictureDescription.value = '';
   setImageScale(DEFAULT_SCALE_VALUE);
-  imagePreview.style.filter = 'none';
+  uploadImagePreview.style.filter = 'none';
+  uploadImagePreview.classList = '';
 };
 
 const openModal = () => {
@@ -112,19 +114,24 @@ pictureDescription.addEventListener('keydown', (evt) => {
   }
 });
 
+const removeEventListeners = (event) => {
+  document.removeEventListener('click', event);
+  document.removeEventListener('keydown', event);
+};
+
 const popupEventsHandler = (evt) => {
   if (isEscEvent(evt)) {
     document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
   }
-  document.removeEventListener('click', popupEventsHandler);
-  document.removeEventListener('keydown', popupEventsHandler);
 };
 
 const popupClickHandler = () => {
   document.body.lastChild.remove();
-  document.removeEventListener('keydown', popupEventsHandler);
+  removeEventListeners(popupEventsHandler);
 };
 
 const popupOpenHandler = (template, button) => {

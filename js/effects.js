@@ -1,8 +1,12 @@
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const imagePreview = document.querySelector('.img-upload__preview');
-const sliderElement = document.querySelector('.effect-level__slider');
-const effectValue = document.querySelector('.effect-level__value');
+const uploadImagePreview = imagePreview.querySelector('img');
 const sliderWrapper = document.querySelector('.img-upload__effect-level');
+const sliderElement = sliderWrapper.querySelector('.effect-level__slider');
+const effectValue = sliderWrapper.querySelector('.effect-level__value');
 const effectsForm = document.querySelector('.img-upload__effects');
+const fileChooser = document.querySelector('#upload-file');
 
 const effects = {
   chrome: {
@@ -76,11 +80,12 @@ noUiSlider.create(sliderElement, {
 const showEffect = (effectClass, effectStyle, effectUnit) => {
   sliderWrapper.classList.remove('visually-hidden');
   imagePreview.classList = 'img-upload__preview';
-  imagePreview.classList.add(`${effectClass}`);
+  uploadImagePreview.classList = '';
+  uploadImagePreview.classList.add(`${effectClass}`);
 
   sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
     effectValue.value = unencoded[handle];
-    imagePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
+    uploadImagePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
   });
 };
 
@@ -98,9 +103,9 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
 effectsForm.addEventListener('click', (evt) => {
   switch (evt.target.id) {
     case ('effect-none'):
-      imagePreview.classList = 'img-upload__preview';
+      uploadImagePreview.classList = '';
       sliderWrapper.classList.add('visually-hidden');
-      imagePreview.style.filter = 'none';
+      uploadImagePreview.style.filter = 'none';
       break;
     case ('effect-chrome'):
       showEffect(effects.chrome.htmlClass, effects.chrome.name, effects.chrome.unit);
@@ -122,5 +127,22 @@ effectsForm.addEventListener('click', (evt) => {
       showEffect(effects.heat.htmlClass, effects.heat.name, effects.heat.unit);
       sliderOptionsHandler(effects.heat.min, effects.heat.max, effects.heat.start, effects.heat.step);
       break;
+  }
+});
+
+fileChooser.addEventListener('change', () => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      uploadImagePreview.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
   }
 });
