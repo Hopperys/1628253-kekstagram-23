@@ -42,9 +42,9 @@ const shuffle = (array) => {
 };
 
 const generateRandomPhotosArray = (defaultArray) => {
-  const newArray = defaultArray.slice(0);
+  const newCommentsArray = defaultArray.slice(0);
 
-  return shuffle(newArray).slice(0, RANDOM_PHOTOS_ARRAY_LENGTH);
+  return shuffle(newCommentsArray).slice(0, RANDOM_PHOTOS_ARRAY_LENGTH);
 };
 
 const sortPhotosArray = (defaultArray) => {
