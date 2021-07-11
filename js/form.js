@@ -4,6 +4,8 @@ import { sendData } from './api.js';
 
 const MAX_TAGS_COUNT = 5;
 const DEFAULT_SCALE_VALUE = 100;
+const MAX_ELEMENT_LENGTH = 20;
+const INVALID_ELEMENT_LENGTH = 1;
 
 const validity =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
@@ -73,13 +75,13 @@ hashTagsInput.addEventListener('input', () => {
     if (element === '') {
       return hashTagsInput.setCustomValidity('');
     }
-    if (element.length === 1) {
+    if (element.length === INVALID_ELEMENT_LENGTH) {
       return hashTagsInput.setCustomValidity('Тег должен состоять минимум из двух символов');
     }
     if (!validity.test(element)) {
       return hashTagsInput.setCustomValidity('Тег должен начинатся с # и состоять максимум из 20 букв и цифр.');
     }
-    if (element.length > 20) {
+    if (element.length > MAX_ELEMENT_LENGTH) {
       return hashTagsInput.setCustomValidity('Макс.длина 20');
     }
     return hashTagsInput.setCustomValidity('');
